@@ -6,7 +6,7 @@ CharCut compares outputs of MT systems with reference translations. It produces 
 The matching algorithm is based on an iterative search for longest common substrings, combined with a length-based threshold that limits short and noisy character matches. As a similarity metric this is not new, but to the best of our knowledge it was never applied to highlighting and scoring of MT outputs. It has the neat effect of keeping character-based differences readable by humans.
 
 Accidentally, the scores inferred from those differences correlate very well with human judgements, similarly to other great character-based metrics like [chrF(++)](https://github.com/m-popovic/chrF) or [CharacTER](https://github.com/rwth-i6/CharacTER). It has been evaluated here:
-> Adrien Lardilleux and Yves Lepage: "CharCut: Human-Targeted Character-Based MT Evaluation with Loose Differences". To appear in IWSLT'17.
+> Adrien Lardilleux and Yves Lepage: "CharCut: Human-Targeted Character-Based MT Evaluation with Loose Differences". To appear in [IWSLT 2017](http://workshop2017.iwslt.org/).
 
 It is intended to be lightweight and easy to use, so the HTML outputs are, and will be kept, slick on purpose.
 
@@ -14,6 +14,7 @@ It is intended to be lightweight and easy to use, so the HTML outputs are, and w
 
 CharCut is written in Python 2.
 
+Basic usage:
 ```
 python charcut.py -c cand.txt -r ref.txt
 ```
