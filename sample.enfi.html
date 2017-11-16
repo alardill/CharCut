@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>charcut output</title>
+  <style>
+    body {font-family: sans-serif; font-size: 11pt;}
+    table, td, th {border-spacing: 0;}
+    th {padding: 10px;}
+    td {padding: 5px;}
+    th {border-top: solid black 2px; font-weight: normal;}
+    .tophead {border-bottom: solid black 1px;}
+    .src {font-style: oblique;}
+    .trg {font-family: Consolas, monospace;}
+    .del {font-weight: bold; color: #f00000;}
+    .ins {font-weight: bold; color: #0040ff;}
+    .shift {font-weight: bold;}
+    .match {}
+    .mainrow {border-top: solid black 1px; padding: 1em;}
+    .midrow {border-bottom: dotted gray 1px;}
+    .seghead {color: gray; text-align: right;}
+    .score {font-family: Consolas, monospace; text-align: right; font-size: large;}
+    .detail {font-size: xx-small; color: gray;}
+  </style>
+  <script>
+    function enter(cls) {
+      var elts = document.getElementsByClassName(cls);
+      for (var i=0; i<elts.length; i++)
+        elts[i].style.backgroundColor = "yellow";
+    }
+    function leave(cls) {
+      var elts = document.getElementsByClassName(cls);
+      for (var i=0; i<elts.length; i++)
+        elts[i].style.backgroundColor = "transparent";
+    }
+  </script>
+</head>
+<body>
+<table>
+  <tr>
+    <th class="tophead">Seg. id</th>
+    <th class="tophead">Score</th>
+    <th class="tophead">
+      Segment comparison:
+      <span class="trg del">Deletion</span>
+      <span class="trg ins">Insertion</span>
+      <span class="trg shift">Shift</span>
+    </th>
+</tr>
+
+<tr>
+  <td class="mainrow">1</td>
+  <td class="mainrow score">
+    <span class="detail">56/143=</span><br/>39%
+  </td>
+  <td class="mainrow">
+    <table>
+      <tr>
+        <td class="seghead midrow">Src:</td>
+        <td class="midrow src">28-Year-Old Chef Found Dead at San Francisco Mall</td>
+       </tr>
+      <tr>
+        <td class="seghead midrow">MT:</td>
+        <td class="midrow trg">
+          <span title="match: 11" class="match seg1_match0" onmouseenter="enter('seg1_match0')" onmouseleave="leave('seg1_match0')">28-vuotias </span><span title="match: 8" class="match seg1_match11" onmouseenter="enter('seg1_match11')" onmouseleave="leave('seg1_match11')">keittiöm</span><span title="del: 3" class="del seg1_diff11" onmouseenter="enter('seg1_diff11')" onmouseleave="leave('seg1_diff11')">ies</span><span title="match: 6" class="match seg1_match22" onmouseenter="enter('seg1_match22')" onmouseleave="leave('seg1_match22')"> kuoll</span><span title="del: 2" class="del seg1_diff22" onmouseenter="enter('seg1_diff22')" onmouseleave="leave('seg1_diff22')">ut</span><span title="match: 4" class="match seg1_match30" onmouseenter="enter('seg1_match30')" onmouseleave="leave('seg1_match30')"> San</span><span title="match: 10" class="match seg1_match34" onmouseenter="enter('seg1_match34')" onmouseleave="leave('seg1_match34')"> Francisco</span><span title="del: 8" class="del seg1_diff34" onmouseenter="enter('seg1_diff34')" onmouseleave="leave('seg1_diff34')">n kauppa</span><span title="shift(-22): 9" class="shift seg1_shift52" onmouseenter="enter('seg1_shift52')" onmouseleave="leave('seg1_shift52')">keskukses</span><span title="del: 2" class="del seg1_diff34" onmouseenter="enter('seg1_diff34')" onmouseleave="leave('seg1_diff34')">sa</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="seghead">Ref:</td><td class="trg">
+          <span title="match: 11" class="match seg1_match0" onmouseenter="enter('seg1_match0')" onmouseleave="leave('seg1_match0')">28-vuotias </span><span title="match: 8" class="match seg1_match11" onmouseenter="enter('seg1_match11')" onmouseleave="leave('seg1_match11')">keittiöm</span><span title="ins: 17" class="ins seg1_diff11" onmouseenter="enter('seg1_diff11')" onmouseleave="leave('seg1_diff11')">estari löydettiin</span><span title="match: 6" class="match seg1_match22" onmouseenter="enter('seg1_match22')" onmouseleave="leave('seg1_match22')"> kuoll</span><span title="ins: 10" class="ins seg1_diff22" onmouseenter="enter('seg1_diff22')" onmouseleave="leave('seg1_diff22')">eena ostos</span><span title="shift(-22): 9" class="shift seg1_shift52" onmouseenter="enter('seg1_shift52')" onmouseleave="leave('seg1_shift52')">keskukses</span><span title="ins: 2" class="ins seg1_diff22" onmouseenter="enter('seg1_diff22')" onmouseleave="leave('seg1_diff22')">ta</span><span title="match: 4" class="match seg1_match30" onmouseenter="enter('seg1_match30')" onmouseleave="leave('seg1_match30')"> San</span><span title="match: 10" class="match seg1_match34" onmouseenter="enter('seg1_match34')" onmouseleave="leave('seg1_match34')"> Francisco</span><span title="ins: 3" class="ins seg1_diff34" onmouseenter="enter('seg1_diff34')" onmouseleave="leave('seg1_diff34')">sta</span>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+
+
+<tr>
+  <td class="mainrow">2</td>
+  <td class="mainrow score">
+    <span class="detail">141/272=</span><br/>52%
+  </td>
+  <td class="mainrow">
+    <table>
+      <tr>
+        <td class="seghead midrow">Src:</td>
+        <td class="midrow src">A 28-year-old chef who had recently moved to San Francisco was found dead in the stairwell of a local mall this week.</td>
+       </tr>
+      <tr>
+        <td class="seghead midrow">MT:</td>
+        <td class="midrow trg">
+          <span title="match: 11" class="match seg2_match0" onmouseenter="enter('seg2_match0')" onmouseleave="leave('seg2_match0')">28-vuotias </span><span title="del: 25" class="del seg2_diff0" onmouseenter="enter('seg2_diff0')" onmouseleave="leave('seg2_diff0')">kokki, joka oli äskettäin</span><span title="shift(-36): 11" class="shift seg2_shift36" onmouseenter="enter('seg2_shift36')" onmouseleave="leave('seg2_shift36')"> muuttanut </span><span title="del: 3" class="del seg2_diff0" onmouseenter="enter('seg2_diff0')" onmouseleave="leave('seg2_diff0')">San</span><span title="shift(-50): 10" class="shift seg2_shift50" onmouseenter="enter('seg2_shift50')" onmouseleave="leave('seg2_shift50')"> Francisco</span><span title="del: 4" class="del seg2_diff0" onmouseenter="enter('seg2_diff0')" onmouseleave="leave('seg2_diff0')">ssa,</span><span title="match: 22" class="match seg2_match64" onmouseenter="enter('seg2_match64')" onmouseleave="leave('seg2_match64')"> löydettiin kuolleena </span><span title="del: 5" class="del seg2_diff64" onmouseenter="enter('seg2_diff64')" onmouseleave="leave('seg2_diff64')">tämän</span><span title="shift(+30): 6" class="shift seg2_shift91" onmouseenter="enter('seg2_shift91')" onmouseleave="leave('seg2_shift91')"> viiko</span><span title="del: 2" class="del seg2_diff64" onmouseenter="enter('seg2_diff64')" onmouseleave="leave('seg2_diff64')">n </span><span title="match: 10" class="match seg2_match99" onmouseenter="enter('seg2_match99')" onmouseleave="leave('seg2_match99')">paikallise</span><span title="del: 10" class="del seg2_diff99" onmouseenter="enter('seg2_diff99')" onmouseleave="leave('seg2_diff99')">ssa kauppa</span><span title="match: 8" class="match seg2_match119" onmouseenter="enter('seg2_match119')" onmouseleave="leave('seg2_match119')">keskukse</span><span title="del: 3" class="del seg2_diff119" onmouseenter="enter('seg2_diff119')" onmouseleave="leave('seg2_diff119')">ssa</span><span title="match: 1" class="match seg2_match130" onmouseenter="enter('seg2_match130')" onmouseleave="leave('seg2_match130')">.</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="seghead">Ref:</td><td class="trg">
+          <span title="ins: 13" class="ins seg2_diff0" onmouseenter="enter('seg2_diff0')" onmouseleave="leave('seg2_diff0')">Vastikään San</span><span title="shift(-50): 10" class="shift seg2_shift50" onmouseenter="enter('seg2_shift50')" onmouseleave="leave('seg2_shift50')"> Francisco</span><span title="ins: 2" class="ins seg2_diff0" onmouseenter="enter('seg2_diff0')" onmouseleave="leave('seg2_diff0')">on</span><span title="shift(-36): 11" class="shift seg2_shift36" onmouseenter="enter('seg2_shift36')" onmouseleave="leave('seg2_shift36')"> muuttanut </span><span title="match: 11" class="match seg2_match0" onmouseenter="enter('seg2_match0')" onmouseleave="leave('seg2_match0')">28-vuotias </span><span title="ins: 14" class="ins seg2_diff0" onmouseenter="enter('seg2_diff0')" onmouseleave="leave('seg2_diff0')">keittiömestari</span><span title="match: 22" class="match seg2_match64" onmouseenter="enter('seg2_match64')" onmouseleave="leave('seg2_match64')"> löydettiin kuolleena </span><span title="match: 10" class="match seg2_match99" onmouseenter="enter('seg2_match99')" onmouseleave="leave('seg2_match99')">paikallise</span><span title="ins: 7" class="ins seg2_diff99" onmouseenter="enter('seg2_diff99')" onmouseleave="leave('seg2_diff99')">n ostos</span><span title="match: 8" class="match seg2_match119" onmouseenter="enter('seg2_match119')" onmouseleave="leave('seg2_match119')">keskukse</span><span title="ins: 23" class="ins seg2_diff119" onmouseenter="enter('seg2_diff119')" onmouseleave="leave('seg2_diff119')">n rappukäytävästä tällä</span><span title="shift(+30): 6" class="shift seg2_shift91" onmouseenter="enter('seg2_shift91')" onmouseleave="leave('seg2_shift91')"> viiko</span><span title="ins: 3" class="ins seg2_diff119" onmouseenter="enter('seg2_diff119')" onmouseleave="leave('seg2_diff119')">lla</span><span title="match: 1" class="match seg2_match130" onmouseenter="enter('seg2_match130')" onmouseleave="leave('seg2_match130')">.</span>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+
+
+<tr>
+  <td class="mainrow">3</td>
+  <td class="mainrow score">
+    <span class="detail">154/284=</span><br/>54%
+  </td>
+  <td class="mainrow">
+    <table>
+      <tr>
+        <td class="seghead midrow">Src:</td>
+        <td class="midrow src">But the victim's brother says he can't think of anyone who would want to hurt him, saying, "Things were finally going well for him."</td>
+       </tr>
+      <tr>
+        <td class="seghead midrow">MT:</td>
+        <td class="midrow trg">
+          <span title="del: 1" class="del seg3_diff0" onmouseenter="enter('seg3_diff0')" onmouseleave="leave('seg3_diff0')">M</span><span title="shift(+61): 4" class="shift seg3_shift1" onmouseenter="enter('seg3_shift1')" onmouseleave="leave('seg3_shift1')">utta</span><span title="del: 2" class="del seg3_diff0" onmouseenter="enter('seg3_diff0')" onmouseleave="leave('seg3_diff0')"> u</span><span title="match: 5" class="match seg3_match7" onmouseenter="enter('seg3_match7')" onmouseleave="leave('seg3_match7')">hrin </span><span title="match: 4" class="match seg3_match12" onmouseenter="enter('seg3_match12')" onmouseleave="leave('seg3_match12')">veli</span><span title="match: 8" class="match seg3_match16" onmouseenter="enter('seg3_match16')" onmouseleave="leave('seg3_match16')"> sanoo, </span><span title="del: 24" class="del seg3_diff16" onmouseenter="enter('seg3_diff16')" onmouseleave="leave('seg3_diff16')">että hän ei voi ajatella</span><span title="match: 14" class="match seg3_match48" onmouseenter="enter('seg3_match48')" onmouseleave="leave('seg3_match48')"> ketään, joka </span><span title="match: 4" class="match seg3_match62" onmouseenter="enter('seg3_match62')" onmouseleave="leave('seg3_match62')">halu</span><span title="del: 1" class="del seg3_diff62" onmouseenter="enter('seg3_diff62')" onmouseleave="leave('seg3_diff62')">a</span><span title="shift(-5): 4" class="shift seg3_shift67" onmouseenter="enter('seg3_shift67')" onmouseleave="leave('seg3_shift67')">isi </span><span title="del: 12" class="del seg3_diff62" onmouseenter="enter('seg3_diff62')" onmouseleave="leave('seg3_diff62')">vahingoittaa</span><span title="match: 8" class="match seg3_match83" onmouseenter="enter('seg3_match83')" onmouseleave="leave('seg3_match83')"> häntä, </span><span title="del: 20" class="del seg3_diff83" onmouseenter="enter('seg3_diff83')" onmouseleave="leave('seg3_diff83')">sanomalla: "Asiat ol</span><span title="match: 4" class="match seg3_match111" onmouseenter="enter('seg3_match111')" onmouseleave="leave('seg3_match111')">ivat</span><span title="match: 8" class="match seg3_match115" onmouseenter="enter('seg3_match115')" onmouseleave="leave('seg3_match115')"> vihdoin</span><span title="del: 8" class="del seg3_diff115" onmouseenter="enter('seg3_diff115')" onmouseleave="leave('seg3_diff115')"> menossa</span><span title="match: 6" class="match seg3_match131" onmouseenter="enter('seg3_match131')" onmouseleave="leave('seg3_match131')"> hyvin</span><span title="del: 10" class="del seg3_diff131" onmouseenter="enter('seg3_diff131')" onmouseleave="leave('seg3_diff131')"> hänelle."</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="seghead">Ref:</td><td class="trg">
+          <span title="ins: 1" class="ins seg3_diff0" onmouseenter="enter('seg3_diff0')" onmouseleave="leave('seg3_diff0')">U</span><span title="match: 5" class="match seg3_match7" onmouseenter="enter('seg3_match7')" onmouseleave="leave('seg3_match7')">hrin </span><span title="match: 4" class="match seg3_match12" onmouseenter="enter('seg3_match12')" onmouseleave="leave('seg3_match12')">veli</span><span title="ins: 10" class="ins seg3_diff12" onmouseenter="enter('seg3_diff12')" onmouseleave="leave('seg3_diff12')"> kuitenkin</span><span title="match: 8" class="match seg3_match16" onmouseenter="enter('seg3_match16')" onmouseleave="leave('seg3_match16')"> sanoo, </span><span title="ins: 11" class="ins seg3_diff16" onmouseenter="enter('seg3_diff16')" onmouseleave="leave('seg3_diff16')">ettei tiedä</span><span title="match: 14" class="match seg3_match48" onmouseenter="enter('seg3_match48')" onmouseleave="leave('seg3_match48')"> ketään, joka </span><span title="ins: 2" class="ins seg3_diff48" onmouseenter="enter('seg3_diff48')" onmouseleave="leave('seg3_diff48')">ol</span><span title="shift(-5): 4" class="shift seg3_shift67" onmouseenter="enter('seg3_shift67')" onmouseleave="leave('seg3_shift67')">isi </span><span title="match: 4" class="match seg3_match62" onmouseenter="enter('seg3_match62')" onmouseleave="leave('seg3_match62')">halu</span><span title="ins: 8" class="ins seg3_diff62" onmouseenter="enter('seg3_diff62')" onmouseleave="leave('seg3_diff62')">nnut sat</span><span title="shift(+61): 4" class="shift seg3_shift1" onmouseenter="enter('seg3_shift1')" onmouseleave="leave('seg3_shift1')">utta</span><span title="ins: 1" class="ins seg3_diff62" onmouseenter="enter('seg3_diff62')" onmouseleave="leave('seg3_diff62')">a</span><span title="match: 8" class="match seg3_match83" onmouseenter="enter('seg3_match83')" onmouseleave="leave('seg3_match83')"> häntä, </span><span title="ins: 30" class="ins seg3_diff83" onmouseenter="enter('seg3_diff83')" onmouseleave="leave('seg3_diff83')">ja toteaa: ”Hänen asiansa suju</span><span title="match: 4" class="match seg3_match111" onmouseenter="enter('seg3_match111')" onmouseleave="leave('seg3_match111')">ivat</span><span title="match: 8" class="match seg3_match115" onmouseenter="enter('seg3_match115')" onmouseleave="leave('seg3_match115')"> vihdoin</span><span title="ins: 3" class="ins seg3_diff115" onmouseenter="enter('seg3_diff115')" onmouseleave="leave('seg3_diff115')">kin</span><span title="match: 6" class="match seg3_match131" onmouseenter="enter('seg3_match131')" onmouseleave="leave('seg3_match131')"> hyvin</span><span title="ins: 2" class="ins seg3_diff131" onmouseenter="enter('seg3_diff131')" onmouseleave="leave('seg3_diff131')">.”</span>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+
+
+<tr>
+  <td class="mainrow">4</td>
+  <td class="mainrow score">
+    <span class="detail">171/368=</span><br/>46%
+  </td>
+  <td class="mainrow">
+    <table>
+      <tr>
+        <td class="seghead midrow">Src:</td>
+        <td class="midrow src">The body found at the Westfield Mall Wednesday morning was identified as 28-year-old San Francisco resident Frank Galicia, the San Francisco Medical Examiner's Office said.</td>
+       </tr>
+      <tr>
+        <td class="seghead midrow">MT:</td>
+        <td class="midrow trg">
+          <span title="match: 10" class="match seg4_match0" onmouseenter="enter('seg4_match0')" onmouseleave="leave('seg4_match0')">Westfield </span><span title="match: 4" class="match seg4_match10" onmouseenter="enter('seg4_match10')" onmouseleave="leave('seg4_match10')">Mall</span><span title="del: 2" class="del seg4_diff10" onmouseenter="enter('seg4_diff10')" onmouseleave="leave('seg4_diff10')">in</span><span title="match: 18" class="match seg4_match16" onmouseenter="enter('seg4_match16')" onmouseleave="leave('seg4_match16')"> keskiviikkoaamuna</span><span title="shift(-34): 8" class="shift seg4_shift34" onmouseenter="enter('seg4_shift34')" onmouseleave="leave('seg4_shift34')"> löydett</span><span title="del: 6" class="del seg4_diff16" onmouseenter="enter('seg4_diff16')" onmouseleave="leave('seg4_diff16')">y elin</span><span title="match: 29" class="match seg4_match48" onmouseenter="enter('seg4_match48')" onmouseleave="leave('seg4_match48')"> tunnistettiin 28-vuotiaaksi </span><span title="del: 4" class="del seg4_diff48" onmouseenter="enter('seg4_diff48')" onmouseleave="leave('seg4_diff48')">San </span><span title="shift(+33): 11" class="shift seg4_shift81" onmouseenter="enter('seg4_shift81')" onmouseleave="leave('seg4_shift81')">Franciscon </span><span title="del: 10" class="del seg4_diff48" onmouseenter="enter('seg4_diff48')" onmouseleave="leave('seg4_diff48')">asukkaaksi</span><span title="match: 23" class="match seg4_match102" onmouseenter="enter('seg4_match102')" onmouseleave="leave('seg4_match102')"> Frank Galiciaksi, San </span><span title="del: 1" class="del seg4_diff102" onmouseenter="enter('seg4_diff102')" onmouseleave="leave('seg4_diff102')">F</span><span title="shift(-24): 8" class="shift seg4_shift126" onmouseenter="enter('seg4_shift126')" onmouseleave="leave('seg4_shift126')">rancisco</span><span title="del: 33" class="del seg4_diff102" onmouseenter="enter('seg4_diff102')" onmouseleave="leave('seg4_diff102')"> Medical Examiner's Office totesi</span><span title="match: 1" class="match seg4_match167" onmouseenter="enter('seg4_match167')" onmouseleave="leave('seg4_match167')">.</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="seghead">Ref:</td><td class="trg">
+          <span title="ins: 12" class="ins seg4_diff0" onmouseenter="enter('seg4_diff0')" onmouseleave="leave('seg4_diff0')">Ruumis, joka</span><span title="shift(-34): 8" class="shift seg4_shift34" onmouseenter="enter('seg4_shift34')" onmouseleave="leave('seg4_shift34')"> löydett</span><span title="ins: 4" class="ins seg4_diff0" onmouseenter="enter('seg4_diff0')" onmouseleave="leave('seg4_diff0')">iin </span><span title="match: 10" class="match seg4_match0" onmouseenter="enter('seg4_match0')" onmouseleave="leave('seg4_match0')">Westfield </span><span title="match: 4" class="match seg4_match10" onmouseenter="enter('seg4_match10')" onmouseleave="leave('seg4_match10')">Mall</span><span title="ins: 18" class="ins seg4_diff10" onmouseenter="enter('seg4_diff10')" onmouseleave="leave('seg4_diff10')"> -ostoskeskuksesta</span><span title="match: 18" class="match seg4_match16" onmouseenter="enter('seg4_match16')" onmouseleave="leave('seg4_match16')"> keskiviikkoaamuna</span><span title="ins: 1" class="ins seg4_diff16" onmouseenter="enter('seg4_diff16')" onmouseleave="leave('seg4_diff16')">,</span><span title="match: 29" class="match seg4_match48" onmouseenter="enter('seg4_match48')" onmouseleave="leave('seg4_match48')"> tunnistettiin 28-vuotiaaksi </span><span title="ins: 4" class="ins seg4_diff48" onmouseenter="enter('seg4_diff48')" onmouseleave="leave('seg4_diff48')">sanf</span><span title="shift(-24): 8" class="shift seg4_shift126" onmouseenter="enter('seg4_shift126')" onmouseleave="leave('seg4_shift126')">rancisco</span><span title="ins: 8" class="ins seg4_diff48" onmouseenter="enter('seg4_diff48')" onmouseleave="leave('seg4_diff48')">laiseksi</span><span title="match: 23" class="match seg4_match102" onmouseenter="enter('seg4_match102')" onmouseleave="leave('seg4_match102')"> Frank Galiciaksi, San </span><span title="shift(+33): 11" class="shift seg4_shift81" onmouseenter="enter('seg4_shift81')" onmouseleave="leave('seg4_shift81')">Franciscon </span><span title="ins: 41" class="ins seg4_diff102" onmouseenter="enter('seg4_diff102')" onmouseleave="leave('seg4_diff102')">kuolemansyyntutkijan virastosta sanottiin</span><span title="match: 1" class="match seg4_match167" onmouseenter="enter('seg4_match167')" onmouseleave="leave('seg4_match167')">.</span>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+
+
+<tr>
+  <td class="mainrow">5</td>
+  <td class="mainrow score">
+    <span class="detail">71/205=</span><br/>35%
+  </td>
+  <td class="mainrow">
+    <table>
+      <tr>
+        <td class="seghead midrow">Src:</td>
+        <td class="midrow src">The San Francisco Police Department said the death was ruled a homicide and an investigation is ongoing.</td>
+       </tr>
+      <tr>
+        <td class="seghead midrow">MT:</td>
+        <td class="midrow trg">
+          <span title="match: 41" class="match seg5_match0" onmouseenter="enter('seg5_match0')" onmouseleave="leave('seg5_match0')">San Franciscon poliisilaitos sanoi, että </span><span title="match: 7" class="match seg5_match41" onmouseenter="enter('seg5_match41')" onmouseleave="leave('seg5_match41')">kuolema</span><span title="del: 7" class="del seg5_diff41" onmouseenter="enter('seg5_diff41')" onmouseleave="leave('seg5_diff41')">sta oli</span><span title="match: 5" class="match seg5_match55" onmouseenter="enter('seg5_match55')" onmouseleave="leave('seg5_match55')"> määr</span><span title="del: 13" class="del seg5_diff55" onmouseenter="enter('seg5_diff55')" onmouseleave="leave('seg5_diff55')">ätty murha ja</span><span title="match: 13" class="match seg5_match73" onmouseenter="enter('seg5_match73')" onmouseleave="leave('seg5_match73')"> tutkinta on </span><span title="del: 10" class="del seg5_diff73" onmouseenter="enter('seg5_diff73')" onmouseleave="leave('seg5_diff73')">meneillään</span><span title="match: 1" class="match seg5_match96" onmouseenter="enter('seg5_match96')" onmouseleave="leave('seg5_match96')">.</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="seghead">Ref:</td><td class="trg">
+          <span title="match: 41" class="match seg5_match0" onmouseenter="enter('seg5_match0')" onmouseleave="leave('seg5_match0')">San Franciscon poliisilaitos sanoi, että </span><span title="match: 7" class="match seg5_match41" onmouseenter="enter('seg5_match41')" onmouseleave="leave('seg5_match41')">kuolema</span><span title="match: 5" class="match seg5_match55" onmouseenter="enter('seg5_match55')" onmouseleave="leave('seg5_match55')"> määr</span><span title="ins: 32" class="ins seg5_diff55" onmouseenter="enter('seg5_diff55')" onmouseleave="leave('seg5_diff55')">itettiin henkirikokseksi ja että</span><span title="match: 13" class="match seg5_match73" onmouseenter="enter('seg5_match73')" onmouseleave="leave('seg5_match73')"> tutkinta on </span><span title="ins: 9" class="ins seg5_diff73" onmouseenter="enter('seg5_diff73')" onmouseleave="leave('seg5_diff73')">käynnissä</span><span title="match: 1" class="match seg5_match96" onmouseenter="enter('seg5_match96')" onmouseleave="leave('seg5_match96')">.</span>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+
+
+<tr>
+  <td class="mainrow">6</td>
+  <td class="mainrow score">
+    <span class="detail">122/488=</span><br/>25%
+  </td>
+  <td class="mainrow">
+    <table>
+      <tr>
+        <td class="seghead midrow">Src:</td>
+        <td class="midrow src">The victim's brother, Louis Galicia, told ABC station KGO in San Francisco that Frank, previously a line cook in Boston, had landed his dream job as line chef at San Francisco's Sons & Daughters restaurant six months ago.</td>
+       </tr>
+      <tr>
+        <td class="seghead midrow">MT:</td>
+        <td class="midrow trg">
+          <span title="match: 10" class="match seg6_match0" onmouseenter="enter('seg6_match0')" onmouseleave="leave('seg6_match0')">Uhrin veli</span><span title="match: 14" class="match seg6_match10" onmouseenter="enter('seg6_match10')" onmouseleave="leave('seg6_match10')"> Louis Galicia</span><span title="match: 7" class="match seg6_match24" onmouseenter="enter('seg6_match24')" onmouseleave="leave('seg6_match24')"> kertoi</span><span title="match: 17" class="match seg6_match31" onmouseenter="enter('seg6_match31')" onmouseleave="leave('seg6_match31')"> San Franciscossa</span><span title="shift(-17): 4" class="shift seg6_shift48" onmouseenter="enter('seg6_shift48')" onmouseleave="leave('seg6_shift48')"> ABC</span><span title="del: 9" class="del seg6_diff31" onmouseenter="enter('seg6_diff31')" onmouseleave="leave('seg6_diff31')">-asemalle</span><span title="shift(-30): 4" class="shift seg6_shift61" onmouseenter="enter('seg6_shift61')" onmouseleave="leave('seg6_shift61')"> KGO</span><span title="match: 31" class="match seg6_match65" onmouseenter="enter('seg6_match65')" onmouseleave="leave('seg6_match65')">, että Frank, joka oli aiemmin </span><span title="match: 16" class="match seg6_match96" onmouseenter="enter('seg6_match96')" onmouseleave="leave('seg6_match96')">Bostonissa, oli </span><span title="del: 4" class="del seg6_diff96" onmouseenter="enter('seg6_diff96')" onmouseleave="leave('seg6_diff96')">purk</span><span title="match: 4" class="match seg6_match116" onmouseenter="enter('seg6_match116')" onmouseleave="leave('seg6_match116')">anut</span><span title="match: 7" class="match seg6_match120" onmouseenter="enter('seg6_match120')" onmouseleave="leave('seg6_match120')"> unelma</span><span title="del: 1" class="del seg6_diff120" onmouseenter="enter('seg6_diff120')" onmouseleave="leave('seg6_diff120')">-</span><span title="match: 9" class="match seg6_match128" onmouseenter="enter('seg6_match128')" onmouseleave="leave('seg6_match128')">työpaikka</span><span title="del: 1" class="del seg6_diff128" onmouseenter="enter('seg6_diff128')" onmouseleave="leave('seg6_diff128')">a</span><span title="match: 4" class="match seg6_match138" onmouseenter="enter('seg6_match138')" onmouseleave="leave('seg6_match138')">nsa </span><span title="del: 17" class="del seg6_diff138" onmouseenter="enter('seg6_diff138')" onmouseleave="leave('seg6_diff138')">viidenneksi San F</span><span title="match: 8" class="match seg6_match159" onmouseenter="enter('seg6_match159')" onmouseleave="leave('seg6_match159')">rancisco</span><span title="del: 1" class="del seg6_diff159" onmouseenter="enter('seg6_diff159')" onmouseleave="leave('seg6_diff159')">n</span><span title="match: 19" class="match seg6_match168" onmouseenter="enter('seg6_match168')" onmouseleave="leave('seg6_match168')"> Sons & Daughters -</span><span title="match: 9" class="match seg6_match187" onmouseenter="enter('seg6_match187')" onmouseleave="leave('seg6_match187')">ravintola</span><span title="del: 3" class="del seg6_diff187" onmouseenter="enter('seg6_diff187')" onmouseleave="leave('seg6_diff187')">ssa</span><span title="match: 24" class="match seg6_match199" onmouseenter="enter('seg6_match199')" onmouseleave="leave('seg6_match199')"> kuusi kuukautta sitten.</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="seghead">Ref:</td><td class="trg">
+          <span title="match: 10" class="match seg6_match0" onmouseenter="enter('seg6_match0')" onmouseleave="leave('seg6_match0')">Uhrin veli</span><span title="ins: 1" class="ins seg6_diff0" onmouseenter="enter('seg6_diff0')" onmouseleave="leave('seg6_diff0')">,</span><span title="match: 14" class="match seg6_match10" onmouseenter="enter('seg6_match10')" onmouseleave="leave('seg6_match10')"> Louis Galicia</span><span title="ins: 1" class="ins seg6_diff10" onmouseenter="enter('seg6_diff10')" onmouseleave="leave('seg6_diff10')">,</span><span title="match: 7" class="match seg6_match24" onmouseenter="enter('seg6_match24')" onmouseleave="leave('seg6_match24')"> kertoi</span><span title="shift(-17): 4" class="shift seg6_shift48" onmouseenter="enter('seg6_shift48')" onmouseleave="leave('seg6_shift48')"> ABC</span><span title="ins: 9" class="ins seg6_diff24" onmouseenter="enter('seg6_diff24')" onmouseleave="leave('seg6_diff24')">:n kanava</span><span title="shift(-30): 4" class="shift seg6_shift61" onmouseenter="enter('seg6_shift61')" onmouseleave="leave('seg6_shift61')"> KGO</span><span title="ins: 4" class="ins seg6_diff24" onmouseenter="enter('seg6_diff24')" onmouseleave="leave('seg6_diff24')">:lle</span><span title="match: 17" class="match seg6_match31" onmouseenter="enter('seg6_match31')" onmouseleave="leave('seg6_match31')"> San Franciscossa</span><span title="match: 31" class="match seg6_match65" onmouseenter="enter('seg6_match65')" onmouseleave="leave('seg6_match65')">, että Frank, joka oli aiemmin </span><span title="ins: 25" class="ins seg6_diff65" onmouseenter="enter('seg6_diff65')" onmouseleave="leave('seg6_diff65')">toiminut linjastokokkina </span><span title="match: 16" class="match seg6_match96" onmouseenter="enter('seg6_match96')" onmouseleave="leave('seg6_match96')">Bostonissa, oli </span><span title="ins: 2" class="ins seg6_diff96" onmouseenter="enter('seg6_diff96')" onmouseleave="leave('seg6_diff96')">sa</span><span title="match: 4" class="match seg6_match116" onmouseenter="enter('seg6_match116')" onmouseleave="leave('seg6_match116')">anut</span><span title="match: 7" class="match seg6_match120" onmouseenter="enter('seg6_match120')" onmouseleave="leave('seg6_match120')"> unelma</span><span title="match: 9" class="match seg6_match128" onmouseenter="enter('seg6_match128')" onmouseleave="leave('seg6_match128')">työpaikka</span><span title="match: 4" class="match seg6_match138" onmouseenter="enter('seg6_match138')" onmouseleave="leave('seg6_match138')">nsa </span><span title="ins: 4" class="ins seg6_diff138" onmouseenter="enter('seg6_diff138')" onmouseleave="leave('seg6_diff138')">sanf</span><span title="match: 8" class="match seg6_match159" onmouseenter="enter('seg6_match159')" onmouseleave="leave('seg6_match159')">rancisco</span><span title="ins: 6" class="ins seg6_diff159" onmouseenter="enter('seg6_diff159')" onmouseleave="leave('seg6_diff159')">laisen</span><span title="match: 19" class="match seg6_match168" onmouseenter="enter('seg6_match168')" onmouseleave="leave('seg6_match168')"> Sons & Daughters -</span><span title="match: 9" class="match seg6_match187" onmouseenter="enter('seg6_match187')" onmouseleave="leave('seg6_match187')">ravintola</span><span title="ins: 26" class="ins seg6_diff187" onmouseenter="enter('seg6_diff187')" onmouseleave="leave('seg6_diff187')">n linjastokeittiömestarina</span><span title="match: 24" class="match seg6_match199" onmouseenter="enter('seg6_match199')" onmouseleave="leave('seg6_match199')"> kuusi kuukautta sitten.</span>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+
+
+<tr>
+  <td class="mainrow">7</td>
+  <td class="mainrow score">
+    <span class="detail">51/212=</span><br/>24%
+  </td>
+  <td class="mainrow">
+    <table>
+      <tr>
+        <td class="seghead midrow">Src:</td>
+        <td class="midrow src">A spokesperson for Sons & Daughters said they were "shocked and devastated" by his death.</td>
+       </tr>
+      <tr>
+        <td class="seghead midrow">MT:</td>
+        <td class="midrow trg">
+          <span title="match: 19" class="match seg7_match0" onmouseenter="enter('seg7_match0')" onmouseleave="leave('seg7_match0')">Sons & Daughtersin </span><span title="del: 6" class="del seg7_diff0" onmouseenter="enter('seg7_diff0')" onmouseleave="leave('seg7_diff0')">tiedot</span><span title="match: 4" class="match seg7_match25" onmouseenter="enter('seg7_match25')" onmouseleave="leave('seg7_match25')">taja</span><span title="match: 16" class="match seg7_match29" onmouseenter="enter('seg7_match29')" onmouseleave="leave('seg7_match29')"> sanoi, että he </span><span title="del: 3" class="del seg7_diff29" onmouseenter="enter('seg7_diff29')" onmouseleave="leave('seg7_diff29')">oli</span><span title="match: 4" class="match seg7_match48" onmouseenter="enter('seg7_match48')" onmouseleave="leave('seg7_match48')">vat </span><span title="del: 1" class="del seg7_diff48" onmouseenter="enter('seg7_diff48')" onmouseleave="leave('seg7_diff48')">"</span><span title="match: 13" class="match seg7_match53" onmouseenter="enter('seg7_match53')" onmouseleave="leave('seg7_match53')">järkyttyneitä</span><span title="shift(-13): 4" class="shift seg7_shift66" onmouseenter="enter('seg7_shift66')" onmouseleave="leave('seg7_shift66')"> ja </span><span title="del: 5" class="del seg7_diff53" onmouseenter="enter('seg7_diff53')" onmouseleave="leave('seg7_diff53')">tuhou</span><span title="shift(-22): 7" class="shift seg7_shift75" onmouseenter="enter('seg7_shift75')" onmouseleave="leave('seg7_shift75')">tuneita</span><span title="del: 1" class="del seg7_diff53" onmouseenter="enter('seg7_diff53')" onmouseleave="leave('seg7_diff53')">"</span><span title="match: 18" class="match seg7_match83" onmouseenter="enter('seg7_match83')" onmouseleave="leave('seg7_match83')"> hänen kuolemansa </span><span title="del: 6" class="del seg7_diff83" onmouseenter="enter('seg7_diff83')" onmouseleave="leave('seg7_diff83')">vuoksi</span><span title="match: 1" class="match seg7_match107" onmouseenter="enter('seg7_match107')" onmouseleave="leave('seg7_match107')">.</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="seghead">Ref:</td><td class="trg">
+          <span title="match: 19" class="match seg7_match0" onmouseenter="enter('seg7_match0')" onmouseleave="leave('seg7_match0')">Sons & Daughtersin </span><span title="ins: 4" class="ins seg7_diff0" onmouseenter="enter('seg7_diff0')" onmouseleave="leave('seg7_diff0')">edus</span><span title="match: 4" class="match seg7_match25" onmouseenter="enter('seg7_match25')" onmouseleave="leave('seg7_match25')">taja</span><span title="match: 16" class="match seg7_match29" onmouseenter="enter('seg7_match29')" onmouseleave="leave('seg7_match29')"> sanoi, että he </span><span title="ins: 1" class="ins seg7_diff29" onmouseenter="enter('seg7_diff29')" onmouseleave="leave('seg7_diff29')">o</span><span title="match: 4" class="match seg7_match48" onmouseenter="enter('seg7_match48')" onmouseleave="leave('seg7_match48')">vat </span><span title="ins: 7" class="ins seg7_diff48" onmouseenter="enter('seg7_diff48')" onmouseleave="leave('seg7_diff48')">”kauhis</span><span title="shift(-22): 7" class="shift seg7_shift75" onmouseenter="enter('seg7_shift75')" onmouseleave="leave('seg7_shift75')">tuneita</span><span title="shift(-13): 4" class="shift seg7_shift66" onmouseenter="enter('seg7_shift66')" onmouseleave="leave('seg7_shift66')"> ja </span><span title="match: 13" class="match seg7_match53" onmouseenter="enter('seg7_match53')" onmouseleave="leave('seg7_match53')">järkyttyneitä</span><span title="ins: 1" class="ins seg7_diff53" onmouseenter="enter('seg7_diff53')" onmouseleave="leave('seg7_diff53')">”</span><span title="match: 18" class="match seg7_match83" onmouseenter="enter('seg7_match83')" onmouseleave="leave('seg7_match83')"> hänen kuolemansa </span><span title="ins: 5" class="ins seg7_diff83" onmouseenter="enter('seg7_diff83')" onmouseleave="leave('seg7_diff83')">takia</span><span title="match: 1" class="match seg7_match107" onmouseenter="enter('seg7_match107')" onmouseleave="leave('seg7_match107')">.</span>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+
+
+<tr>
+  <td class="mainrow">8</td>
+  <td class="mainrow score">
+    <span class="detail">84/214=</span><br/>39%
+  </td>
+  <td class="mainrow">
+    <table>
+      <tr>
+        <td class="seghead midrow">Src:</td>
+        <td class="midrow src">"We are a small team that operates like a close knit family and he will be dearly missed," the spokesperson said.</td>
+       </tr>
+      <tr>
+        <td class="seghead midrow">MT:</td>
+        <td class="midrow trg">
+          <span title="del: 7" class="del seg8_diff0" onmouseenter="enter('seg8_diff0')" onmouseleave="leave('seg8_diff0')">"Olemme</span><span title="match: 26" class="match seg8_match7" onmouseenter="enter('seg8_match7')" onmouseleave="leave('seg8_match7')"> pieni tiimi, joka toimii </span><span title="del: 7" class="del seg8_diff7" onmouseenter="enter('seg8_diff7')" onmouseleave="leave('seg8_diff7')">lähellä</span><span title="match: 6" class="match seg8_match40" onmouseenter="enter('seg8_match40')" onmouseleave="leave('seg8_match40')"> tiivi</span><span title="del: 3" class="del seg8_diff40" onmouseenter="enter('seg8_diff40')" onmouseleave="leave('seg8_diff40')">itä</span><span title="match: 6" class="match seg8_match49" onmouseenter="enter('seg8_match49')" onmouseleave="leave('seg8_match49')"> perhe</span><span title="del: 3" class="del seg8_diff49" onmouseenter="enter('seg8_diff49')" onmouseleave="leave('seg8_diff49')">itä</span><span title="match: 5" class="match seg8_match58" onmouseenter="enter('seg8_match58')" onmouseleave="leave('seg8_match58')">, ja </span><span title="del: 12" class="del seg8_diff58" onmouseenter="enter('seg8_diff58')" onmouseleave="leave('seg8_diff58')">hänet jäävät</span><span title="match: 11" class="match seg8_match75" onmouseenter="enter('seg8_match75')" onmouseleave="leave('seg8_match75')"> kaipaamaan</span><span title="del: 9" class="del seg8_diff75" onmouseenter="enter('seg8_diff75')" onmouseleave="leave('seg8_diff75')">", tiedot</span><span title="match: 4" class="match seg8_match95" onmouseenter="enter('seg8_match95')" onmouseleave="leave('seg8_match95')">taja</span><span title="match: 7" class="match seg8_match99" onmouseenter="enter('seg8_match99')" onmouseleave="leave('seg8_match99')"> sanoi.</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="seghead">Ref:</td><td class="trg">
+          <span title="ins: 10" class="ins seg8_diff0" onmouseenter="enter('seg8_diff0')" onmouseleave="leave('seg8_diff0')">”Meillä on</span><span title="match: 26" class="match seg8_match7" onmouseenter="enter('seg8_match7')" onmouseleave="leave('seg8_match7')"> pieni tiimi, joka toimii </span><span title="ins: 4" class="ins seg8_diff7" onmouseenter="enter('seg8_diff7')" onmouseleave="leave('seg8_diff7')">kuin</span><span title="match: 6" class="match seg8_match40" onmouseenter="enter('seg8_match40')" onmouseleave="leave('seg8_match40')"> tiivi</span><span title="ins: 1" class="ins seg8_diff40" onmouseenter="enter('seg8_diff40')" onmouseleave="leave('seg8_diff40')">s</span><span title="match: 6" class="match seg8_match49" onmouseenter="enter('seg8_match49')" onmouseleave="leave('seg8_match49')"> perhe</span><span title="match: 5" class="match seg8_match58" onmouseenter="enter('seg8_match58')" onmouseleave="leave('seg8_match58')">, ja </span><span title="ins: 13" class="ins seg8_diff58" onmouseenter="enter('seg8_diff58')" onmouseleave="leave('seg8_diff58')">häntä tullaan</span><span title="match: 11" class="match seg8_match75" onmouseenter="enter('seg8_match75')" onmouseleave="leave('seg8_match75')"> kaipaamaan</span><span title="ins: 15" class="ins seg8_diff75" onmouseenter="enter('seg8_diff75')" onmouseleave="leave('seg8_diff75')"> kovasti”, edus</span><span title="match: 4" class="match seg8_match95" onmouseenter="enter('seg8_match95')" onmouseleave="leave('seg8_match95')">taja</span><span title="match: 7" class="match seg8_match99" onmouseenter="enter('seg8_match99')" onmouseleave="leave('seg8_match99')"> sanoi.</span>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+
+
+<tr>
+  <td class="mainrow">9</td>
+  <td class="mainrow score">
+    <span class="detail">116/188=</span><br/>62%
+  </td>
+  <td class="mainrow">
+    <table>
+      <tr>
+        <td class="seghead midrow">Src:</td>
+        <td class="midrow src">Our thoughts and condolences are with Frank's family and friends at this difficult time.</td>
+       </tr>
+      <tr>
+        <td class="seghead midrow">MT:</td>
+        <td class="midrow trg">
+          <span title="del: 1" class="del seg9_diff0" onmouseenter="enter('seg9_diff0')" onmouseleave="leave('seg9_diff0')">A</span><span title="match: 11" class="match seg9_match1" onmouseenter="enter('seg9_match1')" onmouseleave="leave('seg9_match1')">jatuksemme </span><span title="del: 11" class="del seg9_diff1" onmouseenter="enter('seg9_diff1')" onmouseleave="leave('seg9_diff1')">ja osanotto</span><span title="shift(-22): 4" class="shift seg9_shift23" onmouseenter="enter('seg9_shift23')" onmouseleave="leave('seg9_shift23')">mme </span><span title="del: 4" class="del seg9_diff1" onmouseenter="enter('seg9_diff1')" onmouseleave="leave('seg9_diff1')">ovat</span><span title="match: 9" class="match seg9_match31" onmouseenter="enter('seg9_match31')" onmouseleave="leave('seg9_match31')"> Frankin </span><span title="match: 6" class="match seg9_match40" onmouseenter="enter('seg9_match40')" onmouseleave="leave('seg9_match40')">perhee</span><span title="del: 4" class="del seg9_diff40" onmouseenter="enter('seg9_diff40')" onmouseleave="leave('seg9_diff40')">n ja</span><span title="match: 7" class="match seg9_match50" onmouseenter="enter('seg9_match50')" onmouseleave="leave('seg9_match50')"> ystävi</span><span title="del: 34" class="del seg9_diff50" onmouseenter="enter('seg9_diff50')" onmouseleave="leave('seg9_diff50')">en kanssa tällä vaikealla hetkellä</span><span title="match: 1" class="match seg9_match91" onmouseenter="enter('seg9_match91')" onmouseleave="leave('seg9_match91')">.</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="seghead">Ref:</td><td class="trg">
+          <span title="ins: 6" class="ins seg9_diff0" onmouseenter="enter('seg9_diff0')" onmouseleave="leave('seg9_diff0')">Lähetä</span><span title="shift(-22): 4" class="shift seg9_shift23" onmouseenter="enter('seg9_shift23')" onmouseleave="leave('seg9_shift23')">mme </span><span title="ins: 1" class="ins seg9_diff0" onmouseenter="enter('seg9_diff0')" onmouseleave="leave('seg9_diff0')">a</span><span title="match: 11" class="match seg9_match1" onmouseenter="enter('seg9_match1')" onmouseleave="leave('seg9_match1')">jatuksemme </span><span title="ins: 20" class="ins seg9_diff1" onmouseenter="enter('seg9_diff1')" onmouseleave="leave('seg9_diff1')">ja surunvalittelumme</span><span title="match: 9" class="match seg9_match31" onmouseenter="enter('seg9_match31')" onmouseleave="leave('seg9_match31')"> Frankin </span><span title="match: 6" class="match seg9_match40" onmouseenter="enter('seg9_match40')" onmouseleave="leave('seg9_match40')">perhee</span><span title="ins: 6" class="ins seg9_diff40" onmouseenter="enter('seg9_diff40')" onmouseleave="leave('seg9_diff40')">lle ja</span><span title="match: 7" class="match seg9_match50" onmouseenter="enter('seg9_match50')" onmouseleave="leave('seg9_match50')"> ystävi</span><span title="ins: 25" class="ins seg9_diff50" onmouseenter="enter('seg9_diff50')" onmouseleave="leave('seg9_diff50')">lle tänä hankalana aikana</span><span title="match: 1" class="match seg9_match91" onmouseenter="enter('seg9_match91')" onmouseleave="leave('seg9_match91')">.</span>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+
+
+<tr>
+  <td class="mainrow">10</td>
+  <td class="mainrow score">
+    <span class="detail">108/232=</span><br/>47%
+  </td>
+  <td class="mainrow">
+    <table>
+      <tr>
+        <td class="seghead midrow">Src:</td>
+        <td class="midrow src">Louis Galicia said Frank initially stayed in hostels, but recently, "Things were finally going well for him."</td>
+       </tr>
+      <tr>
+        <td class="seghead midrow">MT:</td>
+        <td class="midrow trg">
+          <span title="match: 19" class="match seg10_match0" onmouseenter="enter('seg10_match0')" onmouseleave="leave('seg10_match0')">Louis Galicia sanoi</span><span title="match: 7" class="match seg10_match19" onmouseenter="enter('seg10_match19')" onmouseleave="leave('seg10_match19')"> Frank </span><span title="del: 10" class="del seg10_diff19" onmouseenter="enter('seg10_diff19')" onmouseleave="leave('seg10_diff19')">aluksi jäi</span><span title="match: 8" class="match seg10_match36" onmouseenter="enter('seg10_match36')" onmouseleave="leave('seg10_match36')"> hostell</span><span title="del: 2" class="del seg10_diff36" onmouseenter="enter('seg10_diff36')" onmouseleave="leave('seg10_diff36')">it</span><span title="match: 8" class="match seg10_match46" onmouseenter="enter('seg10_match46')" onmouseleave="leave('seg10_match46')">, mutta </span><span title="del: 15" class="del seg10_diff46" onmouseenter="enter('seg10_diff46')" onmouseleave="leave('seg10_diff46')">viime aikoina "</span><span title="match: 4" class="match seg10_match69" onmouseenter="enter('seg10_match69')" onmouseleave="leave('seg10_match69')">asia</span><span title="del: 1" class="del seg10_diff69" onmouseenter="enter('seg10_diff69')" onmouseleave="leave('seg10_diff69')">t</span><span title="match: 8" class="match seg10_match74" onmouseenter="enter('seg10_match74')" onmouseleave="leave('seg10_match74')"> vihdoin</span><span title="del: 12" class="del seg10_diff74" onmouseenter="enter('seg10_diff74')" onmouseleave="leave('seg10_diff74')"> menestyivät</span><span title="match: 6" class="match seg10_match94" onmouseenter="enter('seg10_match94')" onmouseleave="leave('seg10_match94')"> hyvin</span><span title="del: 1" class="del seg10_diff94" onmouseenter="enter('seg10_diff94')" onmouseleave="leave('seg10_diff94')"> </span><span title="shift(-32): 4" class="shift seg10_shift101" onmouseenter="enter('seg10_shift101')" onmouseleave="leave('seg10_shift101')">häne</span><span title="del: 5" class="del seg10_diff94" onmouseenter="enter('seg10_diff94')" onmouseleave="leave('seg10_diff94')">lle."</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="seghead">Ref:</td><td class="trg">
+          <span title="match: 19" class="match seg10_match0" onmouseenter="enter('seg10_match0')" onmouseleave="leave('seg10_match0')">Louis Galicia sanoi</span><span title="ins: 6" class="ins seg10_diff0" onmouseenter="enter('seg10_diff0')" onmouseleave="leave('seg10_diff0')">, että</span><span title="match: 7" class="match seg10_match19" onmouseenter="enter('seg10_match19')" onmouseleave="leave('seg10_match19')"> Frank </span><span title="ins: 12" class="ins seg10_diff19" onmouseenter="enter('seg10_diff19')" onmouseleave="leave('seg10_diff19')">yöpyi alkuun</span><span title="match: 8" class="match seg10_match36" onmouseenter="enter('seg10_match36')" onmouseleave="leave('seg10_match36')"> hostell</span><span title="ins: 5" class="ins seg10_diff36" onmouseenter="enter('seg10_diff36')" onmouseleave="leave('seg10_diff36')">eissa</span><span title="match: 8" class="match seg10_match46" onmouseenter="enter('seg10_match46')" onmouseleave="leave('seg10_match46')">, mutta </span><span title="ins: 16" class="ins seg10_diff46" onmouseenter="enter('seg10_diff46')" onmouseleave="leave('seg10_diff46')">että äskettäin ”</span><span title="shift(-32): 4" class="shift seg10_shift101" onmouseenter="enter('seg10_shift101')" onmouseleave="leave('seg10_shift101')">häne</span><span title="ins: 2" class="ins seg10_diff46" onmouseenter="enter('seg10_diff46')" onmouseleave="leave('seg10_diff46')">n </span><span title="match: 4" class="match seg10_match69" onmouseenter="enter('seg10_match69')" onmouseleave="leave('seg10_match69')">asia</span><span title="ins: 12" class="ins seg10_diff69" onmouseenter="enter('seg10_diff69')" onmouseleave="leave('seg10_diff69')">nsa sujuivat</span><span title="match: 8" class="match seg10_match74" onmouseenter="enter('seg10_match74')" onmouseleave="leave('seg10_match74')"> vihdoin</span><span title="ins: 3" class="ins seg10_diff74" onmouseenter="enter('seg10_diff74')" onmouseleave="leave('seg10_diff74')">kin</span><span title="match: 6" class="match seg10_match94" onmouseenter="enter('seg10_match94')" onmouseleave="leave('seg10_match94')"> hyvin</span><span title="ins: 2" class="ins seg10_diff94" onmouseenter="enter('seg10_diff94')" onmouseleave="leave('seg10_diff94')">”.</span>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+
+
+<tr>
+  <th>Total</th>
+  <th class="score"><span class="detail">1074/2606=</span><br/>41%</th>
+  <th></th>
+</tr>
+</table></html>
