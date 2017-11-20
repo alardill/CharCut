@@ -26,6 +26,7 @@ so that they be reused in other projects.
 import argparse
 import difflib
 import gzip
+import math
 import re
 
 from collections import defaultdict
@@ -283,7 +284,8 @@ def greedy_matching(seq1, seq2, min_match_size):
     mask1 = [1] * len(seq1)
     mask2 = [1] * len(seq2)
 
-    # List all common substrings and sort them by length
+    # List *all* common substrings and sort them (mainly) by length.
+    # This is fine since we do (should) not deal with huge strings.
     match_it = chain(word_based_matches(seq1, seq2, min_match_size),
                      char_based_matches(seq1, seq2, min_match_size))
     dedup = {match[0]: match for match in match_it}
@@ -356,18 +358,19 @@ def add_shift_distance(ops, reg_matches):
     Returns an iterator over 4-tuples:
     (pos in seq1, pos in seq2, substring, integer distance)
     """
-    # This function used to turn shifts back into insertions/deletions
-    # if the shift distance was "too large" (currently disabled).
+    # Experimental: turn shifts back into insertions/deletions
+    # if the shift distance is "too large".
     for op in ops:
         alo, blo, slice = op
         if alo == -1 or blo == -1 or op in reg_matches:
             yield op + (0,)
         else:  # shift
             dist = eval_shift_distance(op, reg_matches)
-            if True:  # or: if len(slice) >= XXX
+            # Heuristic: the shorter a string,
+            # the shorter the distance it is allowed to travel
+            if math.exp(len(slice)) >= abs(dist):
                 yield op + (dist,)
             else:  # replace shift with deletion + insertion
-                # Dead code, left on purpose
                 yield -1, blo, slice, 0
                 yield alo, -1, slice, 0
 
@@ -446,18 +449,17 @@ def compare_segments(cand, ref, min_match_size):
 
 
 def _get_cost(styled_ops, css_clazz):
-    for _, _, slice, _, clazz, _ in styled_ops:
-        if clazz == css_clazz:
-            yield len(slice)
+    return sum(len(slice) for _, _, slice, _, clazz, _ in styled_ops
+               if clazz == css_clazz)
 
 
 def score_all(aligned_segs, styled_ops, alt_norm):
     """Score segment pairs based on their differences."""
     for ((seg_id, _, src, cand, ref), (styled_cand, styled_ref)) in zip(aligned_segs, styled_ops):
-        ins_cost = sum(_get_cost(styled_cand, 'del'))
-        del_cost = sum(_get_cost(styled_ref, 'ins'))
+        ins_cost = _get_cost(styled_cand, 'del')
+        del_cost = _get_cost(styled_ref, 'ins')
         # shifts are the same in cand and ref
-        shift_cost = sum(_get_cost(styled_cand, 'shift'))
+        shift_cost = _get_cost(styled_cand, 'shift')
         cost = ins_cost + del_cost + shift_cost
         div = 2 * len(cand) if alt_norm else len(cand) + len(ref)
         # Prevent scores > 100%
