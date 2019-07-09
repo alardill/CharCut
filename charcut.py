@@ -1,7 +1,7 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 # CharCut: lightweight character-based MT output highlighting and scoring.
-# Copyright (C) 2017 Lardilleux
+# Copyright (C) 2017,2019 Lardilleux
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,11 +27,13 @@ import argparse
 import difflib
 import gzip
 import math
+import os.path
 import re
 
-from collections import defaultdict
+from collections import defaultdict, Counter
 from itertools import chain
 from operator import itemgetter
+from xml.sax.saxutils import escape
 
 
 def make_base_parser():
@@ -59,10 +61,10 @@ def parse_args():
     """Parse and return command line options."""
     parser = make_base_parser()
     add_parser_output_options(parser)
-    parser.add_argument('-s', '--src', help='source file, only used for display')
-    parser.add_argument('-c', '--cand', required=True,
-                        help='candidate (MT hypothesis) file')
-    parser.add_argument('-r', '--ref', required=True, help='reference file')
+    parser.add_argument('-s', '--src_file', help='source file, only used for display')
+    parser.add_argument('file_pair', nargs='+',
+                        help='list of comma-separated file pairs to compare, e.g. '
+                             'mt1.txt,ref.txt mt2.txt,ref.txt mt1.txt,mt2.txt')
     return parser.parse_args()
 
 
@@ -77,19 +79,22 @@ def load_input_files(args):
     """
     Load input files specified in the CL arguments into memory.
 
-    Returns a list of 5-tuples: (segment_id, origin, src_segment,
-                                 candidate_segment, reference_segment)
+    Returns a list of 4-tuples: (segment_id, origin, src_segment,
+                                 [(candidate_segment, reference_segment), ...])
     "origin" is always None (present for compatibility with other modules handling sdlxliff files).
     "src_segment" is None if the source file was not passed on the CL.
+    There is one (candidate_segment, reference_segment) for each positional argument on the command line.
     """
-    cand_segs = read_gz8(args.cand)
-    ref_segs = read_gz8(args.ref)
+    cand_ref_file_pairs = [pair.split(',') for pair in args.file_pair]
+    cand_ref_zips = [list(map(read_gz8, file_pair)) for file_pair in cand_ref_file_pairs]
     # src file is optional
-    src_segs = read_gz8(args.src) if args.src else [None] * len(cand_segs)
-    assert len(src_segs) == len(cand_segs) == len(ref_segs)
-    return [(i, None, src.strip() if src else src, cand.strip(), ref.strip())
-            for i, (src, cand, ref)
-            in enumerate(zip(src_segs, cand_segs, ref_segs), 1)]
+    src_segs = read_gz8(args.src_file) if args.src_file else [None] * len(cand_ref_zips[0][0])
+    for cand_segs, ref_segs in cand_ref_zips:
+        assert len(src_segs) == len(cand_segs) == len(ref_segs)
+    # Transpose lists
+    cand_ref_segs = list(zip(*[list(zip(*cand_ref)) for cand_ref in cand_ref_zips]))
+    return [(i, None, src.strip() if src else src, [(cand.strip(), ref.strip()) for cand, ref in cand_refs])
+            for i, (src, cand_refs) in enumerate(zip(src_segs, cand_ref_segs), 1)]
 
 
 def iter_common_substrings(seq1, seq2, start_pos1, start_pos2, min_match_size, add_fix):
@@ -127,11 +132,11 @@ def iter_common_substrings(seq1, seq2, start_pos1, start_pos2, min_match_size, a
             if i + offset < n2:
                 tokens2[seq2[i+offset]].append(i)
         # Take intersection of the two token sets
-        for token, ok_pos1 in tokens1.iteritems():
+        for token, ok_pos1 in tokens1.items():
             ok_pos2 = tokens2.get(token)
             if ok_pos2:
                 first_pos = ok_pos1[0]
-                substr = u''.join(seq1[first_pos:first_pos+offset+1])
+                substr = ''.join(seq1[first_pos:first_pos+offset+1])
                 if len(substr) >= min_match_size:
                     yield substr, ok_pos1, ok_pos2
                 elif add_fix and 0 in ok_pos1 and 0 in ok_pos2:  # common prefix
@@ -164,10 +169,10 @@ def word_split(seq):
 
 def word_based_matches(seq1, seq2, min_match_size):
     """Iterator over all word-based common substrings between seq1 and seq2."""
-    starts1, words1 = zip(*word_split(seq1)) if seq1 else ([], [])
-    starts2, words2 = zip(*word_split(seq2)) if seq2 else ([], [])
-    it = iter_common_substrings(words1, words2, range(len(words1)),
-                                range(len(words2)), min_match_size, True)
+    starts1, words1 = list(zip(*word_split(seq1))) if seq1 else ([], [])
+    starts2, words2 = list(zip(*word_split(seq2))) if seq2 else ([], [])
+    it = iter_common_substrings(words1, words2, list(range(len(words1))),
+                                list(range(len(words2))), min_match_size, True)
     for substr, pos1, pos2 in it:
         # Replace positions in words with positions in characters
         yield substr, [starts1[i] for i in pos1], [starts2[i] for i in pos2]
@@ -206,14 +211,14 @@ def char_split(seq, sep_sign):
     """
     split = CHAR_RE.split(seq)
     # Fix in case seq contains only non-word characters
-    tokens = [u'', split[0], u''] if len(split) == 1 else split
+    tokens = ['', split[0], ''] if len(split) == 1 else split
     # "tokens" alternate actual words and runs of non-word characters
     starts = list(start_pos(tokens))
-    for i in xrange(0, len(tokens)-2, 2):
+    for i in range(0, len(tokens)-2, 2):
         # insert unique separator to prevent common substrings to span multiple words
         if i:
             yield None, i * sep_sign, False
-        for j in xrange(i, i+3):
+        for j in range(i, i+3):
             is_start_pos = j != i+2
             for k, char in enumerate(tokens[j], starts[j]):
                 yield k, char, is_start_pos
@@ -221,8 +226,8 @@ def char_split(seq, sep_sign):
 
 def char_based_matches(seq1, seq2, min_match_size):
     """Iterator over all intra-word character-based common substrings between seq1 and seq2."""
-    starts1, chars1, is_start1 = zip(*char_split(seq1, 1)) if seq1 else ([], [], [])
-    starts2, chars2, is_start2 = zip(*char_split(seq2, -1)) if seq2 else ([], [], [])
+    starts1, chars1, is_start1 = list(zip(*char_split(seq1, 1))) if seq1 else ([], [], [])
+    starts2, chars2, is_start2 = list(zip(*char_split(seq2, -1))) if seq2 else ([], [], [])
     start_pos1 = [i for i, is_start in enumerate(is_start1) if is_start]
     start_pos2 = [i for i, is_start in enumerate(is_start2) if is_start]
     ics = iter_common_substrings(chars1, chars2, start_pos1, start_pos2, min_match_size, False)
@@ -289,7 +294,7 @@ def greedy_matching(seq1, seq2, min_match_size):
     match_it = chain(word_based_matches(seq1, seq2, min_match_size),
                      char_based_matches(seq1, seq2, min_match_size))
     dedup = {match[0]: match for match in match_it}
-    match_list = sorted(dedup.itervalues(), key=order_key)
+    match_list = sorted(dedup.values(), key=order_key)
 
     # Consume all common substrings, longest first
     while match_list:
@@ -324,8 +329,8 @@ def find_regular_matches(ops):
     matches2 = sorted(matches1, key=lambda match: match[1])
     # Search for the longest common subsequence in characters
     # Expand "string" matches into "character" matches
-    char_matches1 = [(m, i) for m in matches1 for i in xrange(len(m[2]))]
-    char_matches2 = [(m, i) for m in matches2 for i in xrange(len(m[2]))]
+    char_matches1 = [(m, i) for m in matches1 for i in range(len(m[2]))]
+    char_matches2 = [(m, i) for m in matches2 for i in range(len(m[2]))]
     sm = difflib.SequenceMatcher(None, char_matches1, char_matches2, autojunk=False)
     return {m for a, _, size in sm.get_matching_blocks()
             for m, _ in char_matches1[a:a + size]}
@@ -377,7 +382,7 @@ def add_shift_distance(ops, reg_matches):
 
 def _merge_adjacent_diffs_aux(diffs):
     prev_start = 0
-    prev_substr = u''
+    prev_substr = ''
     for start, substr in diffs:
         if start == prev_start + len(prev_substr):
             prev_substr += substr
@@ -453,79 +458,124 @@ def _get_cost(styled_ops, css_clazz):
                if clazz == css_clazz)
 
 
+def score_pair(cand, ref, styled_cand, styled_ref, alt_norm):
+    """Score a single candidate/reference pair."""
+    ins_cost = _get_cost(styled_cand, 'del')
+    del_cost = _get_cost(styled_ref, 'ins')
+    # shifts are identical in cand and ref
+    shift_cost = _get_cost(styled_cand, 'shift')
+    cost = ins_cost + del_cost + shift_cost
+    div = 2 * len(cand) if alt_norm else len(cand) + len(ref)
+    # Prevent scores > 100%
+    bounded_cost = min(cost, div)
+    return bounded_cost, div
+
+
 def score_all(aligned_segs, styled_ops, alt_norm):
     """Score segment pairs based on their differences."""
-    for ((seg_id, _, src, cand, ref), (styled_cand, styled_ref)) in zip(aligned_segs, styled_ops):
-        ins_cost = _get_cost(styled_cand, 'del')
-        del_cost = _get_cost(styled_ref, 'ins')
-        # shifts are the same in cand and ref
-        shift_cost = _get_cost(styled_cand, 'shift')
-        cost = ins_cost + del_cost + shift_cost
-        div = 2 * len(cand) if alt_norm else len(cand) + len(ref)
-        # Prevent scores > 100%
-        bounded_cost = min(cost, div)
-        yield bounded_cost, div
+    for ((_, _, _, cand_refs), styled_cand_refs) in zip(aligned_segs, styled_ops):
+        yield [score_pair(cand, ref, styled_cand, styled_ref, alt_norm)
+               for (cand, ref), (styled_cand, styled_ref) in zip(cand_refs, styled_cand_refs)]
 
 
 def ops2html(styled_ops, seg_id):
     for op in styled_ops:
         _, _, slice, dist, css, css_id = op
-        substr_id = u'seg{}_{}'.format(seg_id, css_id)
-        dist_str = u'({:+d})'.format(dist) if dist else ''
+        substr_id = 'seg{}_{}'.format(seg_id, css_id)
+        dist_str = '({:+d})'.format(dist) if dist else ''
         slice_len = len(slice)
-        yield u'<span title="{css}{dist_str}: {slice_len}" class="{css} {substr_id}" ' \
-              u'onmouseenter="enter(\'{substr_id}\')" onmouseleave="leave(\'{substr_id}\')">' \
-              u'{slice}</span>'.format(**locals()).encode('u8')
+        esc_slice = escape(slice)
+        yield '<span title="{css}{dist_str}: {slice_len}" class="{css} {substr_id}" ' \
+              'onmouseenter="enter(\'{substr_id}\')" onmouseleave="leave(\'{substr_id}\')">' \
+              '{esc_slice}</span>'.format(**locals())
 
 
-def segs2html(segs, ops, score_pair):
-    """Do highlighting on a single segment pair."""
-    seg_id, origin, src, cand, ref = segs
-    styled_cand, styled_ref = ops
-    cost, div = score_pair
-    score = (1.*cost/div) if div else 0
-    origin_str = '<p class="detail">({})</p>'.format(origin) if origin else ''
-    src_str = '''<tr>
-        <td class="seghead midrow">Src:</td>
-        <td class="midrow src">{}</td>
-       </tr>'''.format(src.encode('u8')) if src else ''
-    cand_str = ''.join(ops2html(styled_cand, seg_id))
-    ref_str = ''.join(ops2html(styled_ref, seg_id))
+def cand2html(ops, seg_id):
+    for i, (styled_cand, _) in enumerate(ops):
+        cand_id = '{}.{}'.format(seg_id, i)
+        yield '''        <td class="compcol trg">{}</td>'''.format(''.join(ops2html(styled_cand, cand_id)))
+
+
+def ref2html(ops, seg_id):
+    for i, (_, styled_ref) in enumerate(ops):
+        cand_id = '{}.{}'.format(seg_id, i)
+        yield '''        <td class="compcol trg">{}</td>'''.format(''.join(ops2html(styled_ref, cand_id)))
+
+
+def scores2html(score_pairs):
+    for cost, div in score_pairs:
+        score = (1. * cost / div) if div else 0
+        yield '''        <td class="score"><span class="detail">{:.0f}/{:.0f}= </span>{:.0%}</td>'''.format(cost, div, score)
+
+
+def basenames2html(idx, basename_pairs, bullets):
+    # idx=0 for cand; idx=1 for ref
+    cell = '        <td class="compcol seghead">{}{}</td>'
+    return '\n'.join(cell.format(bullets.get(pair[idx], ''), pair[idx])
+                     for pair in basename_pairs)
+
+
+def segs2html(segs, ops, score_pairs, src_basename, basename_pairs, bullets):
+    """Apply highlighting on a single segment pair."""
+    seg_id, origin, src, cand_refs = segs
+    origin_str = '<p class="info">({})</p>'.format(origin) if origin else ''
+    src_str = '''      <tr><td colspan="{}" class="seghead">{}</td></tr>
+      <tr><td colspan="{}" class="srcrow src">{}</td></tr>'''.format(
+      len(ops), src_basename, len(ops), escape(src)) if src else '<!-- no source -->'
+    cand_basename_cells = basenames2html(0, basename_pairs, bullets)
+    ref_basename_cells = basenames2html(1, basename_pairs, bullets)
+    cand_cells = '\n'.join(cand2html(ops, seg_id))
+    ref_cells = '\n'.join(ref2html(ops, seg_id))
+    score_cells = '\n'.join(scores2html(score_pairs))
     return '''
 <tr>
-  <td class="mainrow">{origin_str}{seg_id}</td>
-  <td class="mainrow score">
-    <span class="detail">{cost:.0f}/{div:.0f}=</span><br/>{score:.0%}
-  </td>
+  <td class="mainrow">{seg_id}{origin_str}</td>
   <td class="mainrow">
     <table>
-      {src_str}
+{src_str}
       <tr>
-        <td class="seghead midrow">MT:</td>
-        <td class="midrow trg">
-          {cand_str}
-        </td>
+{cand_basename_cells}
       </tr>
       <tr>
-        <td class="seghead">Ref:</td><td class="trg">
-          {ref_str}
-        </td>
+{cand_cells}
+      </tr>
+      <tr>
+{ref_basename_cells}
+      </tr>
+      <tr>
+{ref_cells}
+      </tr>
+      <tr>
+{score_cells}
       </tr>
     </table>
   </td>
-</tr>
-'''.format(**locals())
+</tr>'''.format(**locals())
 
 
-def html_dump(out_file, aligned_segs, styled_ops, seg_scores, doc_cost, doc_div):
+def make_coloured_bullets(basenames):
     """
-    Do highlighting on all segments and output them as a HTML file.
+    Create a mapping between filenames and corresponding coloured HTML bullet.
+    """
+    # Predefined list of colours, used in turn.
+    # If the filenames are more numerous, the colours are just re-used.
+    colours = ['#00d000', '#d0d000', '#d000d0', '#d0d0d0', '#d00000', '#0000d0', '#00d0d0']
+    # Colour only filenames that are used at least twice
+    to_colour = [name for name, count in Counter(basenames).most_common() if count > 1]
+    bullet = '<span style="color:{}">&#9632;</span> '
+    return {to_colour: bullet.format(colours[i % len(colours)])
+            for i, to_colour in enumerate(to_colour)}
+
+
+def html_dump(out_file, aligned_segs, styled_ops, seg_scores, doc_costs, doc_divs, args):
+    """
+    Apply highlighting on all segments and output them in HTML.
 
     aligned_segs are the input segments as returned by load_input_files().
     styled_ops are the decorated operations as returned by compare_segments().
     seg_scores are the pairs (cost, div) as returned by score_all().
     """
-    print >> out_file, '''<!DOCTYPE html>
+    html_top = '''<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -536,6 +586,7 @@ def html_dump(out_file, aligned_segs, styled_ops, seg_scores, doc_cost, doc_div)
     th {padding: 10px;}
     td {padding: 5px;}
     th {border-top: solid black 2px; font-weight: normal;}
+    #key {margin-left: auto; margin-right: auto; text-align: left;}
     .tophead {border-bottom: solid black 1px;}
     .src {font-style: oblique;}
     .trg {font-family: Consolas, monospace;}
@@ -544,10 +595,12 @@ def html_dump(out_file, aligned_segs, styled_ops, seg_scores, doc_cost, doc_div)
     .shift {font-weight: bold;}
     .match {}
     .mainrow {border-top: solid black 1px; padding: 1em;}
-    .midrow {border-bottom: dotted gray 1px;}
-    .seghead {color: gray; text-align: right;}
-    .score {font-family: Consolas, monospace; text-align: right; font-size: large;}
-    .detail {font-size: xx-small; color: gray;}
+    .srcrow {padding-bottom: 15px;}
+    .compcol {border-left: solid lightgray 2px;}
+    .seghead {color: gray; padding-bottom: 0;}
+    .score {font-family: Consolas, monospace; font-size: large; text-align: center;}
+    .detail {font-size: xx-small; color: gray; text-align: right;}
+    .info {font-size: xx-small; color: gray;}
   </style>
   <script>
     function enter(cls) {
@@ -564,41 +617,55 @@ def html_dump(out_file, aligned_segs, styled_ops, seg_scores, doc_cost, doc_div)
 </head>
 <body>
 <table>
-  <tr>
-    <th class="tophead">Seg. id</th>
-    <th class="tophead">Score</th>
-    <th class="tophead">
-      Segment comparison:
-      <span class="trg del">Deletion</span>
-      <span class="trg ins">Insertion</span>
-      <span class="trg shift">Shift</span>
-    </th>
+<tr>
+  <th class="tophead">Seg. id</th>
+  <th class="tophead">
+    <table id="key">
+      <tr>
+        <td>Segment comparison:</td>
+        <td class="trg">
+          <span class="del">Deletion</span><br/>
+          <span class="ins">Insertion</span><br/>
+          <span class="shift">Shift</span>
+        </td>
+      </tr>
+    </table>
+  </th>
 </tr>'''
+    print(html_top, file=out_file)
+    src_basename = os.path.basename(args.src_file) if args.src_file else ''
+    basename_pairs = [list(map(os.path.basename, pair.split(','))) for pair in args.file_pair]
+    bullets = make_coloured_bullets(chain(*basename_pairs))
     prev_id = None
-    for segs, ops, score_pair in zip(aligned_segs, styled_ops, seg_scores):
+    for segs, ops, score_pairs in zip(aligned_segs, styled_ops, seg_scores):
         if prev_id:
-            # There might be mismatches with unsafe input
+            # There may be mismatches with unsafe input
             try:
                 skipped = int(segs[0]) - int(prev_id) - 1
             except ValueError:
                 # Some seg ids contain letters, just ignore
                 skipped = None
             if skipped:
-                print >> out_file, '''
+                print('''
 <tr>
-  <td class="detail" title="Mismatch - {} seg. skipped">[...]</td>
-</tr>'''.format(skipped)
+  <td class="info" title="Mismatch - {} seg. skipped">[...]</td>
+</tr>'''.format(skipped), file=out_file)
 
         prev_id = segs[0]
-        print >> out_file, segs2html(segs, ops, score_pair)
-    print >> out_file, '''
+        print(segs2html(segs, ops, score_pairs, src_basename, basename_pairs, bullets), file=out_file)
+
+    score_cell = '<td class="score"><span class="detail">{:.0f}/{:.0f}= </span>{:.0%}</td>'
+    score_row = ''.join(score_cell.format(doc_cost, doc_div, (1.*doc_cost/doc_div) if doc_div else 0)
+                        for doc_cost, doc_div in zip(doc_costs, doc_divs))
+    print('''
 <tr>
   <th>Total</th>
-  <th class="score"><span class="detail">{:.0f}/{:.0f}=</span><br/>{:.0%}</th>
-  <th></th>
-</tr>'''.format(doc_cost, doc_div, (1.*doc_cost/doc_div) if doc_div else 0)
-
-    print >> out_file, '</table></html>'
+  <th>
+    <table style="width:100%"><tr>{}</tr></table>
+  </th>
+</tr>
+</table>
+</html>'''.format(score_row), file=out_file)
 
 
 def format_score(cost, div):
@@ -614,32 +681,31 @@ def run_on(aligned_segs, args):
     This way this function can be reused by other modules using different arguments
     or input means.
 
-    Returns the document-level score (0~1).
+    Returns the document-level score of the first  (0~1).
     """
-    styled_ops = [compare_segments(cand, ref, args.match_size)
-                  for seg_id, _, _, cand, ref in aligned_segs]
+    
+    styled_ops = [[compare_segments(cand, ref, args.match_size) for cand, ref in cand_refs]
+                  for seg_id, _, _, cand_refs in aligned_segs]
 
     seg_scores = list(score_all(aligned_segs, styled_ops, args.alt_norm))
-    doc_cost = sum(cost for cost, _ in seg_scores)
-    doc_div = sum(div for _, div in seg_scores)
+    pair_scores = list(zip(*seg_scores))
 
-    print format_score(doc_cost, doc_div)
+    doc_costs = [sum(cost for cost, _ in pairs) for pairs in pair_scores]
+    doc_divs = [sum(div for _, div in pairs) for pairs in pair_scores]
+
+    print('\t'.join(format_score(doc_cost, doc_div)
+                    for doc_cost, doc_div in zip(doc_costs, doc_divs)))
 
     if getattr(args, 'plain_output_file', None):
         with open(args.plain_output_file, 'w') as plain_file:
-            for pair in seg_scores:
-                print >> plain_file, format_score(*pair)
+            for pairs in seg_scores:
+                print('\t'.join(format_score(*pair) for pair in pairs), file=plain_file)
 
     if getattr(args, 'html_output_file', None):
         with open(args.html_output_file, 'w') as html_file:
-            html_dump(html_file, aligned_segs, styled_ops, seg_scores, doc_cost, doc_div)
+            html_dump(html_file, aligned_segs, styled_ops, seg_scores, doc_costs, doc_divs, args)
 
-    if getattr(args, 'con_output_file', None):
-        with open(args.con_output_file, 'w') as con_file:
-            for (seg_id, orig, src, cand, ref), (cand_ops, ref_ops) in zip(aligned_segs, styled_ops):
-                print >> con_file, repr((cand_ops, ref_ops, cand, ref))
-
-    return (1. * doc_cost / doc_div) if doc_div else 0.
+    return (1. * doc_costs[0] / doc_divs[0]) if doc_divs[0] else 0., len(aligned_segs)
 
 
 if __name__ == '__main__':
